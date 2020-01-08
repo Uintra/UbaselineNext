@@ -1,16 +1,9 @@
+@config: `{
+    container: '1160px',
+    columns: 12,
+    gutter: 1 / 4
+}`;
 @import './app/lib/ui-kit/grid.less';
-
-/* You can add global styles to this file, and also import other style files */
-:root {
-    --White: #ffffff;
-    --Black: #000000;
-    --Steel-grey: #f2f0f0;
-    --Concrete-grey: #dad8d8;
-    --greyblue: #67a9af;
-    --marine: #083959;
-    --warm-grey: #999999;
-    --warm-grey-two: #777777;
-}
 
 * {
     box-sizing: border-box;
@@ -30,8 +23,9 @@ body {
 head {
     display: block;
     &::after {
-        .debug();
+        .ubl-debug();
         pointer-events: none;
     }
 }
 // @debug: true;
+

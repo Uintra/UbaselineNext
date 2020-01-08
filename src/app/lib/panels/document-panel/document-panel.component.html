@@ -1,0 +1,5 @@
+<h3 class="documents-panel__title" *ngIf="data.title">{{data.title}}</h3>
+<div class="documents-panel__content">
+  <section ubl-text *ngIf="data.description" [ublText]="data.description" class="documents-panel__description"></section>
+  <documents *ngIf="data.documents" [documents]="data.documents"></documents>
+</div>

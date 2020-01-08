@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UmbracoFlatPropertyModel } from '../models/umbraco/model';
+import { UmbracoFlatPropertyModel } from '../models/umbraco/umbraco-flat-property';
 
 @Injectable({
   providedIn: 'root'

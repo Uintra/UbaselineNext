@@ -4,6 +4,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NotImplementedModule } from './lib/ui-kit/not-implemented/not-implemented.module';
+import { DocumentPanelComponent } from './lib/panels/document-panel/document-panel.component';
+import { DocumentPanelModule } from './lib/panels/document-panel/document-panel.module';
 
 
 @NgModule({
@@ -14,7 +16,8 @@ import { NotImplementedModule } from './lib/ui-kit/not-implemented/not-implement
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NotImplementedModule
+    NotImplementedModule,
+    DocumentPanelModule
   ],
   bootstrap: [AppComponent]
 })

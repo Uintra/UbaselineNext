@@ -1,0 +1,33 @@
+<!-- REVIEW:
+  Make condition as meaningful function.
+  It's hard to understand when that condition applied.
+  Remove hardcoded urls -->
+<ng-container *ngIf="pictureData">
+  <ng-container *ngIf="isLazyLoading">
+    <source *ngFor="let item of pictureData?.sources"
+      attr.defaultImage="here you can add image that will be displayed while main image is loading"
+      [attr.lazyLoad]="item.srcSet"
+      media="{{ item.media }}">
+    <img
+      defaultImage="here you can add image that will be displayed while main image is loading"
+      [lazyLoad]="pictureData.src"
+      [ngStyle]="style"
+      [alt]="pictureData.alt"
+      [title]="pictureData.alt"
+      [errorImage]="fallback" />
+  </ng-container>
+  
+  <ng-container *ngIf="!isLazyLoading">
+    <source *ngFor="let item of pictureData.sources" srcset="{{ item.srcSet }}" media="{{ item.media }}">
+    <img
+      [ngStyle]="style"
+      src="{{ pictureData.src }}"
+      [alt]="pictureData.alt"
+      [title]="pictureData.alt"
+      (error)="fallbackHandler($event)" />
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="!pictureData">
+  No image
+</ng-container>

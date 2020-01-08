@@ -11,7 +11,7 @@ export * from './umbraco-support/components/resolve/resolve.component';
 export * from './umbraco-support/components/resolve/resolve.service';
 export * from './umbraco-support/mappers/server-response-data-mapper.service';
 export * from './umbraco-support/models/umbraco/interface';
-export * from './umbraco-support/models/umbraco/model';
+export * from './umbraco-support/models/umbraco/umbraco-flat-property';
 
 // UIKit
 export * from './ui-kit/not-implemented/not-implemented.module';

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "name": "@ubaseline/next",
+  "version": "0.0.15",
+  "ngPackage": {
+    "lib": {
+      "entryFile": "public-api.ts",
+      "styleIncludePaths": []
+    }
+  },
+  "peerDependencies": {
+    "@angular/core": "^8.0.0",
+    "@angular/animations": "^8.0.0"
+  },
+  "whitelistedNonPeerDependencies": [
+    "schematics-utilities"
+  ],
+  "schematics": "./schematics/collection.json"
+}

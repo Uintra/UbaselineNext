@@ -1,0 +1,49 @@
+@debug: false;
+
+@plugin './grid';
+grid(@config);
+
+.ubl-span(@rest...) {
+    width: span(@arguments);
+    margin-right: gutter-width(@arguments);
+}
+
+.ubl-push(@rest...) {
+    margin-left: offset(@arguments);
+}
+
+.ubl-container(@rest...) {
+    display: flex;
+    max-width: container(@arguments);
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+    @media (max-width: 1150px) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+.ubl-debug() {
+    & when (@debug = true) {
+        .ubl-container();
+        pointer-events: none;
+        @color: rgba(red, .1);
+        content: "";
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        z-index: 9999;
+        background: repeating-linear-gradient(90deg, @color, @color span-width(1), transparent span-width(1), transparent column-width(1));
+        width: 100%;
+        transform: translateX(-50%);
+        @media (max-width: 1440px) {
+            left: 10px;
+            right: 10px;
+            transform: translate(0);
+            width: initial;
+        }
+    }
+}

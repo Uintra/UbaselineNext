@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsUBaselinePage",
+  "title": "UBaseline Page Schema",
+  "type": "object",
+  "description": "Creates a new page.",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the page.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "alias": {
+      "type": "string",
+      "description": "ContentEditorAlias from Umbraco",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      }
+    },
+    "path": {
+      "type": "string",
+      "description": "Path for page",
+      "default": "ui/pages",
+      "$default": {
+        "$source": "argv",
+        "index": 2
+      }
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

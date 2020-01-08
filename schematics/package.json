@@ -1,0 +1,34 @@
+{
+  "name": "@ubaseline/schematics",
+  "version": "0.0.0",
+  "description": "Ubaseline schematics",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && npm run copy:entry && npm run copy:add-schema && npm run copy:page-schema && npm run copy:panel-schema && npm run copy:add-files && npm run copy:page-files && npm run copy:panel-files",
+    "test": "npm run build && jasmine src/**/*_spec.js",
+    "dev": "tsc -p tsconfig.dev.json -w",
+    "copy:entry": "copy src\\collection.json ..\\src\\app\\lib\\dist\\schematics\\collection.json",
+    "copy:add-files": "Xcopy /E src\\add\\files ..\\src\\app\\lib\\dist\\schematics\\add\\files\\",
+    "copy:page-files": "Xcopy /E src\\page\\files ..\\src\\app\\lib\\dist\\schematics\\page\\files\\",
+    "copy:panel-files": "Xcopy /E src\\panel\\files ..\\src\\app\\lib\\dist\\schematics\\panel\\files\\",
+    "copy:add-schema": "copy src\\add\\schema.json ..\\src\\app\\lib\\dist\\schematics\\add\\schema.json",
+    "copy:page-schema": "copy src\\page\\schema.json ..\\src\\app\\lib\\dist\\schematics\\page\\schema.json",
+    "copy:panel-schema": "copy src\\panel\\schema.json ..\\src\\app\\lib\\dist\\schematics\\panel\\schema.json"
+  },
+  "keywords": [
+    "schematics"
+  ],
+  "author": "Compent",
+  "license": "MIT",
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "^8.3.12",
+    "@angular-devkit/schematics": "^8.3.12",
+    "@types/jasmine": "^3.3.9",
+    "@types/node": "^8.0.31",
+    "jasmine": "^3.3.1",
+    "typescript": "~3.5.3"
+  },
+  "devDependencies": {
+    "@angular-devkit/schematics-cli": "^0.803.12"
+  }
+}

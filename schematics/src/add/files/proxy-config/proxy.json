@@ -1,0 +1,25 @@
+{
+  "/ubaseline/api/*": {
+    "target": "<%= localDevelopmentHost %>",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/media/*": {
+    "target": "<%= localDevelopmentHost %>",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "wwwroot/favicon.ico": {
+    "target": "http://localhost:4200/favicon.ico",
+    "secure": false
+  },
+  "/wwwroot/*": {
+    "target": "http://localhost:4200",
+    "secure": false,
+    "pathRewrite": {
+      "^/wwwroot": ""
+    }
+  }
+}

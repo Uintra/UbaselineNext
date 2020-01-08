@@ -1,0 +1,3 @@
+
+<div class="description" #descriptionRef (click)="descriptionRef.toggle = !descriptionRef.toggle">{{ description }}</div>
+<pre class="data" *ngIf="data && descriptionRef.toggle">{{ data | json }}</pre>

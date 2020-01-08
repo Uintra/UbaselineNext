@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsUBaselineAdd",
+  "title": "UBaseline Add Schema",
+  "type": "object",
+  "description": "Add UbaselineNext to project.",
+  "properties": {
+    "devHost": {
+      "type": "string",
+      "default": "http://ubaseline.local.compent.dk",
+      "description": "For development.",
+      "x-prompt": "Please provide host url(development) you serve data from. \ndefault:"
+    }
+  },
+  "required": []
+}

@@ -1,7 +1,3 @@
-<!-- REVIEW:
-  Make condition as meaningful function.
-  It's hard to understand when that condition applied.
-  Remove hardcoded urls -->
 <ng-container *ngIf="pictureData">
   <ng-container *ngIf="isLazyLoading">
     <source *ngFor="let item of pictureData?.sources"

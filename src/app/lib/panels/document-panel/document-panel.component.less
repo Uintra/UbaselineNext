@@ -1,5 +1,6 @@
 :host {
   display: block;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 .documents-panel {
@@ -9,8 +10,8 @@
   }
 
   &__title {
-    background: #261d43;
-    color: #fff;
+    color: #261d43;
+    background: #fff;
     text-transform: uppercase;
     font-size: 16px;
     font-weight: bold;
@@ -18,10 +19,12 @@
     line-height: 20px;
     border-bottom: none;
     margin: 0;
-  }
+    border-bottom: 1px solid #d6d6d6;
 
-  &__content {
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+    &--right-column {
+      background: #261d43;
+      color: #fff;
+    }
   }
 
   &__description {

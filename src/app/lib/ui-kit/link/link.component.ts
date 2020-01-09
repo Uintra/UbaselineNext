@@ -9,4 +9,5 @@ import { ILink } from '../../core/interface/link';
 export class LinkComponent {
   @Input() data: ILink;
   @Input() download: boolean;
+  @Input() withArrow: Boolean;
 }

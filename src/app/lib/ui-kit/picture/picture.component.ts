@@ -6,9 +6,6 @@ import { isDevModeAndNoData } from './helper/is-dev-mode-and-no-data';
 import { getExtension } from '../../core/util/strings/get-extension';
 import { isInPictureDataNotFallback } from './helper/is-in-picture-data-not-fallback';
 
-// REVIEW: Extract interfaces to separate file
-// REVIEW: Move to lib/core/utils
-
 @Component({
   selector: 'picture[ubl-picture]',
   templateUrl: './picture.component.html',
@@ -28,7 +25,7 @@ export class PictureComponent implements OnInit {
         height: 0;
         overflow: hidden;
         position: relative;`
-      ); //REVIEW: Remove hardcode
+      );
     }
   }
 
@@ -39,7 +36,6 @@ export class PictureComponent implements OnInit {
 
   constructor(private sanitizer:DomSanitizer, private elementRef: ElementRef) {}
 
-  // REVIEW: Don't use underscore. If it's private use modifier private instead.
   getHostElement() {
     return this.elementRef.nativeElement;
   }
@@ -49,8 +45,6 @@ export class PictureComponent implements OnInit {
   }
 
   ngOnInit() {
-    // REVIEW: Make condition as meaningful function.
-    // It's hard to understand when that condition applied.
     if (isDevModeAndNoData(this.data, this.fallback)) console.error(
       `Please provide at least one of string or PictureData or fallback. In production will be used empty string as src therefore alt text will be used`
     );
@@ -80,7 +74,7 @@ export class PictureComponent implements OnInit {
     }
     
     this.className = `${this.elementRef.nativeElement.className} ${this.getImageExtension()} ${!!this.ratio ? 'picture--ratio' : ''} ${!isInPictureDataNotFallback(this.pictureData, this.fallback) && this.pictureData ? 'picture--fallback' : ''}`;
-
+    
     if (!this.fallback && !this.data) {
       this.className += 'picture--fail';
       return;
@@ -90,9 +84,6 @@ export class PictureComponent implements OnInit {
   }
 
   getImageExtension() {
-    // REVIEW: Make condition as meaningful function.
-    // It's hard to understand when that condition applied.
-    
     if (this.pictureData) {
       this.currentPictureExtension = getExtension(this.pictureData.src);
       return getExtension(this.pictureData.src);
@@ -116,9 +107,7 @@ export class PictureComponent implements OnInit {
     this.pictureData = null;
   }
 
-  // REVIEW: Add type of event.
   fallbackHandler(event: IPictureFallbackEvent) {
-    // REVIEW: Please use hasOwnProperty check in such loops.
     if (isInPictureDataNotFallback(this.pictureData, this.fallback)) {
       this.className = !!this.currentPictureExtension 
         ? this.className.replace(this.currentPictureExtension, getExtension(this.fallback))

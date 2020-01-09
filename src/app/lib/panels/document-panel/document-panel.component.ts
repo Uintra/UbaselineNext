@@ -1,4 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
+export interface IDocumentPanelData {
+  title: string;
+  description: string;
+  documents: IDocumentItem[];
+}
+
+export interface IDocumentItem {
+  url: string;
+  name: string;
+  extension: string;
+}
 
 @Component({
   selector: 'document-panel',
@@ -6,27 +18,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./document-panel.component.less']
 })
 export class DocumentPanelComponent implements OnInit {
-  data: any;
+  @Input() data: IDocumentPanelData;
+  @Input() isRightColumn: boolean;
 
   constructor() { }
 
   ngOnInit() {
-    this.data = {
-      title: 'Some title',
-      description: 'Fusce pretium gravida nibh, vel ultricies diam luctus imperdiet. Vestibulum vel sodales leo. Donec tortor turpis, ultricies id nunc vitae, faucibus efficitur eros. Mauris sit amet quam facilisis velit mollis faucibus nec id erat.',
-      documents: [
-        {
-          url: "/media/1vilpggz/testworddoc.doc",
-          name: "TestWordDoc.doc (2)",
-          extension: "doc",
-        },
-        {
-          url: "/media/1vilpggz/testworddoc.doc",
-          name: "TestWordDoc.pdf",
-          extension: "pdf",
-        },
-      ]
-    }
   }
-
 }

@@ -1,10 +1,18 @@
 <ng-container *ngIf="data">
   <a class="link__link" *ngIf="!data.innerRoute && !download" href="{{ data.url }}" target="{{ data.target }}">
     <ng-container *ngTemplateOutlet="content"></ng-container>
+
+    <div *ngIf="withArrow" class="link__arrow">
+      <ng-container *ngTemplateOutlet="icon"></ng-container>
+    </div>
   </a>
 
   <a class="link__link" *ngIf="!data.innerRoute && download" download href="{{ data.url }}" target="{{ data.target }}">
     <ng-container *ngTemplateOutlet="content"></ng-container>
+
+    <div *ngIf="withArrow" class="link__arrow">
+      <ng-container *ngTemplateOutlet="icon"></ng-container>
+    </div>
   </a>
 
   <a class="link__link"
@@ -15,6 +23,10 @@
     [routerLinkActiveOptions]="{exact: true}"
     [routerLinkActive]="'link__link--active'">
       <ng-container *ngTemplateOutlet="content"></ng-container>
+
+      <div *ngIf="withArrow" class="link__arrow">
+        <ng-container *ngTemplateOutlet="icon"></ng-container>
+      </div>
   </a>
 </ng-container>
 
@@ -24,3 +36,9 @@
   <ng-content select='[position="after"]'></ng-content>
 </ng-template>
 
+<ng-template #icon>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+    <path
+      d="M28 14H8.8l4.6-4.6c.4-.4.6-.9.6-1.4 0-1-.8-2-2-2-.5 0-1 .2-1.4.6l-8 8c-.3.3-.6.7-.6 1.4s.3 1 .6 1.4l8 8c.4.4.9.6 1.4.6 1.2 0 2-1 2-2 0-.5-.2-1-.6-1.4L8.8 18H28a2 2 0 0 0 0-4z" />
+  </svg>
+</ng-template>

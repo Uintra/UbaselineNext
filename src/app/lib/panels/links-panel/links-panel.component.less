@@ -1,0 +1,53 @@
+@import '../../../../base.less';
+// !!! IMPORTANT ViewEncapsulation is None, therefore all styles you will write here
+// can affect global space. Please write styles inside .app-links-panel selector
+
+.app-links-panel {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    .centered();
+    display: block;
+    .title {
+        margin-bottom: 20px;
+    }
+    .icon {
+        &::before {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            content: "";
+            background-position: center;
+            background-size: contain;
+        }
+    }
+    .icon-arrow-right::before {
+        transform: rotate(180deg);
+        background-image: url("data:image/svg+xml,%3Csvg _ngcontent-kxd-c16='' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath _ngcontent-kxd-c16='' d='M28 14H8.8l4.6-4.6c.4-.4.6-.9.6-1.4 0-1-.8-2-2-2-.5 0-1 .2-1.4.6l-8 8c-.3.3-.6.7-.6 1.4s.3 1 .6 1.4l8 8c.4.4.9.6 1.4.6 1.2 0 2-1 2-2 0-.5-.2-1-.6-1.4L8.8 18H28a2 2 0 0 0 0-4z'%3E%3C/path%3E%3C/svg%3E");
+    }
+    .links {
+        margin-left: 10%;
+    }
+    ubl-link {
+        display: flex;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        &:extend(.app-links-panel .icon all);
+        &:extend(.app-links-panel .icon-arrow-right all);
+
+        &::before {
+            margin-right: 16px;
+        }
+        .link {
+            &__link {
+                text-decoration: underline;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
+
+
+

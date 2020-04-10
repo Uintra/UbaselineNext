@@ -20,45 +20,69 @@ export class ResolveService implements Resolve<any> {
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
   {
-    const data = await this.http.get(this.creteUmbracoGetByUrl(state.url)).toPromise(); // TODO: handle 404|500
-    const dynamicUrl  = state.url.replace(/\%2F/g, '').substr(1);
+    const url = this.getUrl(route);
+    const data = await this.http.get<any>(this.createUmbracoGetByUrl(url)).toPromise(); // TODO: handle 500
+    const dynamicUrl  = this.getUrl(route, true).substr(1);
     const dynamicRoute = dynamicUrl.split('?').shift();
     const { queryParams } = this.urlParser.parse(dynamicUrl);
     const existedRoute = this.router.config.find(page => page.path === dynamicRoute);
-    route
+    
     if (!existedRoute)
     {
-      const pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
-      if (!pageConfig)
-      {
+      const pageConfig = data ? this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']) : null;
+      if (!pageConfig) {
         !this.config.environment.production && console.log(data);
-        // TODO: go to 404
-        console.log('go to 404')
-        return null;
+        
+        this.router.navigate(['/404']).then(function () {
+          this.setTitlePage();
+        });
+
+        return [2 /*return*/, null];
       }
-      let test = this.defaultDataMapper.map(data).toJSON();
+      let mappedData = this.defaultDataMapper.map(data).toJSON();
 
       this.router.config.unshift({
         path: dynamicRoute,
         loadChildren: pageConfig.loadChildren,
-        data: test
+        data: mappedData
       });
     }
 
     this.router.navigate([dynamicRoute], { queryParams: queryParams}).then(() => {
+      this.setTitlePage(data);
       const config = this.config.pages.find(page => page.id === data['contentTypeAlias']);
-
       if (config && config.cache === false) this.router.config.shift();
     });
 
     return null;
   }
 
-  private creteUmbracoGetByUrl(url: string)
+  private createUmbracoGetByUrl(url: string)
   {
     const prefix = this.config.apiPrefix;
     const host = window.location.origin; // TODO: Make service
 
     return `${prefix}/node/getByUrl?url=${host}${url}`;
+  }
+
+  private setTitlePage(data?: {name: string}) {
+    if (data) {
+      document.title = `${data.name} | Uintra`
+    } else {
+      document.title = "Uintra"
+    }
+  }
+
+  private getUrl(route: ActivatedRouteSnapshot, needsEncoding?: boolean): string {
+    const urlArray = route.url.map(elem => elem.path);
+    let url = "/" + urlArray.join("/");
+    const queryParamsArray = [];
+    for (let param in route.queryParams) {
+        queryParamsArray.push(param + "=" + (needsEncoding ? encodeURIComponent(route.queryParams[param]) : route.queryParams[param]));
+    }
+    if (queryParamsArray.length) {
+        url += "?" + queryParamsArray.join("&");
+    }
+    return url;
   }
 }

@@ -4,6 +4,7 @@ import { Route } from '@angular/router';
 export interface IUmbracoPage extends Route {
     id: string;
     cache?: boolean;
+    legacy?: boolean;
 }
 export interface IEnvironment {
     production: boolean;

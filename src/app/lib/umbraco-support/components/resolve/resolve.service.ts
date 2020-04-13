@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { UMBRACO_SUPPORT_CONFIG, IUmbracoConfig } from '../../config';
 import { ServerResponseDataMapperService } from '../../mappers/server-response-data-mapper.service';
 import { SiteSettingsService, ISiteSettings } from '../../site-settings/site-settings.service';
+import { DataMapperService } from '../../mappers/data-mapper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class ResolveService implements Resolve<any> {
     private http: HttpClient,
     private router: Router,
     @Inject(UMBRACO_SUPPORT_CONFIG) private config: IUmbracoConfig,
-    private defaultDataMapper: ServerResponseDataMapperService,
+    private legacyDataMapper: ServerResponseDataMapperService,
+    private defaultDataMapper: DataMapperService,
     private siteSettingsService: SiteSettingsService
   ) { }
 
@@ -36,7 +38,7 @@ export class ResolveService implements Resolve<any> {
         data = await this.getData(siteSettings.pageNotFoundPageUrl || '/404');
         pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
       }
-      let mappedData = this.defaultDataMapper.map(data).toJSON();
+      let mappedData = pageConfig.legacy ? this.legacyDataMapper.map(data).toJSON() : this.defaultDataMapper.mapData(data);
 
       this.router.config.unshift({
         path: dynamicRoute,

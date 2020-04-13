@@ -3,6 +3,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router, DefaultUr
 import { HttpClient } from '@angular/common/http';
 import { UMBRACO_SUPPORT_CONFIG, IUmbracoConfig } from '../../config';
 import { ServerResponseDataMapperService } from '../../mappers/server-response-data-mapper.service';
+import { SiteSettingsService, ISiteSettings } from '../../site-settings/site-settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,29 +16,25 @@ export class ResolveService implements Resolve<any> {
     private http: HttpClient,
     private router: Router,
     @Inject(UMBRACO_SUPPORT_CONFIG) private config: IUmbracoConfig,
-    private defaultDataMapper: ServerResponseDataMapperService
+    private defaultDataMapper: ServerResponseDataMapperService,
+    private siteSettingsService: SiteSettingsService
   ) { }
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
   {
+    const siteSettings = await this.siteSettingsService.getSiteSettings();
     const url = this.getUrl(route);
-    const data = await this.http.get<any>(this.createUmbracoGetByUrl(url)).toPromise(); // TODO: handle 500
+    let data = await this.getData(url); // TODO: handle 500
     const dynamicUrl  = this.getUrl(route, true).substr(1);
     const dynamicRoute = dynamicUrl.split('?').shift();
     const { queryParams } = this.urlParser.parse(dynamicUrl);
     const existedRoute = this.router.config.find(page => page.path === dynamicRoute);
     
-    if (!existedRoute)
-    {
-      const pageConfig = data ? this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']) : null;
+    if (!existedRoute) {
+      let pageConfig = data ? this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']) : null;
       if (!pageConfig) {
-        !this.config.environment.production && console.log(data);
-        
-        this.router.navigate(['/404']).then(function () {
-          this.setTitlePage();
-        });
-
-        return [2 /*return*/, null];
+        data = await this.getData(siteSettings.pageNotFoundPageUrl || '/404');
+        pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
       }
       let mappedData = this.defaultDataMapper.map(data).toJSON();
 
@@ -49,7 +46,7 @@ export class ResolveService implements Resolve<any> {
     }
 
     this.router.navigate([dynamicRoute], { queryParams: queryParams}).then(() => {
-      this.setTitlePage(data);
+      this.setTitlePage(siteSettings, data);
       const config = this.config.pages.find(page => page.id === data['contentTypeAlias']);
       if (config && config.cache === false) this.router.config.shift();
     });
@@ -65,11 +62,11 @@ export class ResolveService implements Resolve<any> {
     return `${prefix}/node/getByUrl?url=${host}${url}`;
   }
 
-  private setTitlePage(data?: {name: string}) {
+  private setTitlePage(siteSettings: ISiteSettings, data?: {name: string}): void {
     if (data) {
-      document.title = `${data.name} | Uintra`
+      document.title = `${data.name} ${siteSettings.pageTitleSeparator} ${siteSettings.siteTitle}`
     } else {
-      document.title = "Uintra"
+      document.title = siteSettings.siteTitle
     }
   }
 
@@ -84,5 +81,15 @@ export class ResolveService implements Resolve<any> {
         url += "?" + queryParamsArray.join("&");
     }
     return url;
+  }
+
+  async getData(url: string) {
+    let data = await this.http.get<any>(this.createUmbracoGetByUrl(url)).toPromise(); // TODO: handle 500
+
+    if (data && data.requiresRedirect) {
+      data = await this.http.get<any>(this.createUmbracoGetByUrl(data.errorLink.originalUrl)).toPromise();
+    }
+
+    return data;
   }
 }

@@ -51,7 +51,7 @@ export class DynamicComponentLoaderService {
     {
       const manifest = this.componentDeclarations.find(m => m.id === componentId);
 
-      return manifest && manifest.dataMapper;
+      return manifest && manifest.legacy;
     }
 
     private getDeclarationByComponentId(id: string)

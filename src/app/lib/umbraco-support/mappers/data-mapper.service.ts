@@ -44,8 +44,12 @@ export class DataMapperService {
     return null;
   };
   ​
-  public mapData(obj) {
+  public map(obj) {
+    const panels = obj.panels && obj.panels.value;
     this.mapper(obj);
+    if (panels) {
+      obj.panels = panels;
+    }
     return obj;
   };
 }

@@ -38,7 +38,7 @@ export class ResolveService implements Resolve<any> {
         data = await this.getData(siteSettings.pageNotFoundPageUrl || '/404');
         pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
       }
-      let mappedData = pageConfig.legacy ? this.legacyDataMapper.map(data).toJSON() : this.defaultDataMapper.mapData(data);
+      let mappedData = pageConfig.legacy ? this.legacyDataMapper.map(data).toJSON() : this.defaultDataMapper.map(data);
 
       this.router.config.unshift({
         path: dynamicRoute,
@@ -86,7 +86,7 @@ export class ResolveService implements Resolve<any> {
   }
 
   async getData(url: string) {
-    let data = await this.http.get<any>(this.createUmbracoGetByUrl(url)).toPromise(); // TODO: handle 500
+    let data = await this.http.get<any>(this.createUmbracoGetByUrl(url)).toPromise();
 
     if (data && data.requiresRedirect) {
       data = await this.http.get<any>(this.createUmbracoGetByUrl(data.errorLink.originalUrl)).toPromise();

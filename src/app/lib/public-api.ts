@@ -12,7 +12,11 @@ export * from './umbraco-support/components/resolve/resolve.service';
 export * from './umbraco-support/mappers/server-response-data-mapper.service';
 export * from './umbraco-support/models/umbraco/interface';
 export * from './umbraco-support/models/umbraco/umbraco-flat-property';
+export * from './umbraco-support/site-settings/site-settings.service';
 
 // UIKit
 export * from './ui-kit/not-implemented/not-implemented.module';
 export * from './ui-kit/not-implemented/not-implemented.component';
+
+//Helpers
+export * from './helper/page-id.service';

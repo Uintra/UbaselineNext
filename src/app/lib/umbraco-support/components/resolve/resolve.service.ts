@@ -35,7 +35,7 @@ export class ResolveService implements Resolve<any> {
     const existedRoute = this.router.config.find(page => page.path === dynamicRoute);
     
     if (!existedRoute) {
-      const pageConfig = data ? this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']) : null;
+      const pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
       const mappedData = pageConfig.legacy ? this.legacyDataMapper.map(data).toJSON() : this.defaultDataMapper.map(data);
 
       this.router.config.unshift({
@@ -79,7 +79,7 @@ export class ResolveService implements Resolve<any> {
     return url;
   }
 
-  async getData(url: string) {
+  private async getData(url: string) {
     let data = await this.http.get<any>(this.createUmbracoGetByUrl(url)).toPromise();
 
     if (data && data.requiresRedirect) {
@@ -87,5 +87,13 @@ export class ResolveService implements Resolve<any> {
     }
 
     return data;
+  }
+
+  public async resolveDataOnSameUrl(url: string) {
+    const data = await this.getData(url);
+
+    return this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']).legacy
+      ? this.legacyDataMapper.map(data).toJSON() 
+      : this.defaultDataMapper.map(data);
   }
 }

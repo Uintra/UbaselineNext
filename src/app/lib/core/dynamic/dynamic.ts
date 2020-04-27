@@ -4,7 +4,7 @@ export interface IDynamicComponent {
     id: string;
     path: string;
     loadChildren: string;
-    legacy?: boolean;
+    mapper?: (any) => any;
 }
 export const DYNAMIC_COMPONENTS = new InjectionToken<IDynamicComponent[]>('DynamicComponents');
 export const AS_DYNAMIC_COMPONENT = new InjectionToken<any>('AsDynamicComponent');

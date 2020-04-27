@@ -1,7 +1,6 @@
 import { Injectable, Injector, NgModuleFactoryLoader, Inject, ComponentFactory } from '@angular/core';
 import { DYNAMIC_COMPONENTS, IDynamicComponent, AS_DYNAMIC_COMPONENT } from './dynamic';
 import { from, Observable, of } from 'rxjs';
-import { ServerResponseDataMapperService } from '../../umbraco-support/mappers/server-response-data-mapper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +10,7 @@ export class DynamicComponentLoaderService {
   constructor(
     @Inject(DYNAMIC_COMPONENTS) private componentDeclarations: IDynamicComponent[],
     private loader: NgModuleFactoryLoader,
-    private injector: Injector,
-    private defaultDataMapper: ServerResponseDataMapperService
+    private injector: Injector
   ) { }
 
   async resolveComponentFactory(componentId: string, injector?: Injector): Promise<ComponentFactory<any>>
@@ -51,7 +49,7 @@ export class DynamicComponentLoaderService {
     {
       const manifest = this.componentDeclarations.find(m => m.id === componentId);
 
-      return manifest && manifest.legacy;
+      return manifest && manifest.mapper;
     }
 
     private getDeclarationByComponentId(id: string)

@@ -9,9 +9,6 @@ export * from './core/util/decorators/index';
 export * from './umbraco-support/umbraco-support.module';
 export * from './umbraco-support/components/resolve/resolve.component';
 export * from './umbraco-support/components/resolve/resolve.service';
-export * from './umbraco-support/mappers/server-response-data-mapper.service';
-export * from './umbraco-support/models/umbraco/interface';
-export * from './umbraco-support/models/umbraco/umbraco-flat-property';
 export * from './umbraco-support/site-settings/site-settings.service';
 
 // UIKit

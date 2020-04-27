@@ -2,7 +2,6 @@ import { Injectable, Inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router, DefaultUrlSerializer, Route } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { UMBRACO_SUPPORT_CONFIG, IUmbracoConfig } from '../../config';
-import { ServerResponseDataMapperService } from '../../mappers/server-response-data-mapper.service';
 import { SiteSettingsService, ISiteSettings } from '../../site-settings/site-settings.service';
 import { DataMapperService } from '../../mappers/data-mapper.service';
 import { PageIdService } from '../../../helper/page-id.service';
@@ -18,7 +17,6 @@ export class ResolveService implements Resolve<any> {
     private http: HttpClient,
     private router: Router,
     @Inject(UMBRACO_SUPPORT_CONFIG) private config: IUmbracoConfig,
-    private legacyDataMapper: ServerResponseDataMapperService,
     private defaultDataMapper: DataMapperService,
     private siteSettingsService: SiteSettingsService,
     private pageIdService: PageIdService,
@@ -36,7 +34,7 @@ export class ResolveService implements Resolve<any> {
     
     if (!existedRoute) {
       const pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
-      const mappedData = pageConfig.legacy ? this.legacyDataMapper.map(data).toJSON() : this.defaultDataMapper.map(data);
+      const mappedData = pageConfig.mapper ? pageConfig.mapper(data) : this.defaultDataMapper.map(data);
 
       this.router.config.unshift({
         path: dynamicRoute,
@@ -58,7 +56,7 @@ export class ResolveService implements Resolve<any> {
   private createUmbracoGetByUrl(url: string)
   {
     const prefix = this.config.apiPrefix;
-    const host = window.location.origin; // TODO: Make service
+    const host = window.location.origin;
 
     return `${prefix}/node/getByUrl?url=${host}${url}`;
   }
@@ -91,9 +89,10 @@ export class ResolveService implements Resolve<any> {
 
   public async resolveDataOnSameUrl(url: string) {
     const data = await this.getData(url);
+    const pageConfigMapper = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']).mapper;
 
-    return this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']).legacy
-      ? this.legacyDataMapper.map(data).toJSON() 
+    return pageConfigMapper
+      ? pageConfigMapper(data)
       : this.defaultDataMapper.map(data);
   }
 }

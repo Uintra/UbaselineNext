@@ -1,8 +1,0 @@
-<section class="image-panel" *ngIf="data">
-  <a class="image-panel__content"
-    [attr.href]="data.link?.value ? data.link?.value?.url : null"
-    target="{{ data.link?.value?.target || '_self' }}">
-    <picture ubl-picture class="image-panel__image" *ngIf="data.image?.value" [data]="data.image?.value"></picture>
-  </a>
-  <p ubl-text *ngIf="data.description?.value" class="image-panel__description">{{data.description.value}}</p>
-</section>

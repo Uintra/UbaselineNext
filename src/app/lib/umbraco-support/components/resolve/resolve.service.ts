@@ -26,7 +26,7 @@ export class ResolveService implements Resolve<any> {
   {
     const siteSettings = await this.siteSettingsService.getSiteSettings();
     const url = this.getUrl(route);
-    const data = await this.getData(url) || await this.getData(siteSettings.pageNotFoundPageUrl || '/404'); // TODO: handle 500
+    const data = await this.getData(url) || await this.getData(siteSettings.pageNotFoundPageUrl || '/404');
     const dynamicUrl  = this.getUrl(route, true).substr(1);
     const dynamicRoute = dynamicUrl.split('?').shift();
     const { queryParams } = this.urlParser.parse(dynamicUrl);

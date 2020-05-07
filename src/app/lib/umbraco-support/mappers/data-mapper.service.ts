@@ -11,18 +11,20 @@ export class DataMapperService {
     const iterable = this.getIterableObject(obj);
 
     iterable.forEach((value, i, arr) => {
-      let current = isArray ? value : obj[value];
+      if (value !== 'panelSettings') {
+        let current = isArray ? value : obj[value];
 
-      if (this.isObject(current)) {
-        if (current.alias) {
-          if (!isArray) {
-            obj[value] = current.value;
-          } else {
-            arr[i] = current.value;
+        if (this.isObject(current)) {
+          if (current.alias) {
+            if (!isArray) {
+              obj[value] = current.value;
+            } else {
+              arr[i] = current.value;
+            }
+            current = current.value;
           }
-          current = current.value;
+          this.mapper(isArray ? current : obj[value]);
         }
-        this.mapper(isArray ? current : obj[value]);
       }
     });
   }

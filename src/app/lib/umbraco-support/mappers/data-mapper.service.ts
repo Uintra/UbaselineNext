@@ -43,9 +43,13 @@ export class DataMapperService {
   ​
   public map(obj) {
     const panels = obj.panels && obj.panels.value;
+    const rightColumnPanels = obj.rightColumnPanels && obj.rightColumnPanels.value;
     this.mapper(obj);
     if (panels) {
       obj.panels = panels;
+    }
+    if (rightColumnPanels) {
+      obj.rightColumnPanels = rightColumnPanels;
     }
     return obj;
   }

@@ -1,7 +1,7 @@
 {
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
   "name": "ubaseline-next-for-uintra",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "ngPackage": {
     "lib": {
       "entryFile": "public-api.ts",

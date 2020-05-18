@@ -43,7 +43,7 @@ export class ResolveService implements Resolve<any> {
       });
     }
 
-    this.router.navigate([dynamicRoute], { queryParams: queryParams}).then(() => {
+    this.router.navigate([dynamicRoute], { queryParams: queryParams, fragment: route.fragment}).then(() => {
       this.setTitlePage(siteSettings, data);
       this.pageIdService.setPageId(data && data.id.get ? data.id.get() : data && data.id);
       const config = this.config.pages.find(page => page.id === data['contentTypeAlias']);
@@ -73,6 +73,9 @@ export class ResolveService implements Resolve<any> {
     }
     if (queryParamsArray.length) {
         url += "?" + queryParamsArray.join("&");
+    }
+    if (route.fragment) {
+      url += `#${route.fragment}`;
     }
     return url;
   }

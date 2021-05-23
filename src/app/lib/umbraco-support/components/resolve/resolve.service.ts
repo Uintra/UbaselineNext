@@ -31,23 +31,23 @@ export class ResolveService implements Resolve<any> {
     const dynamicRoute = dynamicUrl.split('?').shift();
     const { queryParams } = this.urlParser.parse(dynamicUrl);
     const existedRoute = this.router.config.find(page => page.path === dynamicRoute);
+
+    const pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
+    const mappedData = pageConfig && pageConfig.mapper ? pageConfig.mapper(data) : this.defaultDataMapper.map(data);
     
     if (!existedRoute) {
-      const pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
-      const mappedData = pageConfig.mapper ? pageConfig.mapper(data) : this.defaultDataMapper.map(data);
-
       this.router.config.unshift({
         path: dynamicRoute,
         loadChildren: pageConfig.loadChildren,
         data: mappedData
       });
+    } else {
+      existedRoute.data = mappedData;
     }
 
     this.router.navigate([dynamicRoute], { queryParams: queryParams, fragment: route.fragment}).then(() => {
       this.setTitlePage(siteSettings, data);
       this.pageIdService.setPageId(data && data.id.get ? data.id.get() : data && data.id);
-      const config = this.config.pages.find(page => page.id === data['contentTypeAlias']);
-      if (config && config.cache === false) this.router.config.shift();
     });
 
     return null;

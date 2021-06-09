@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "pg": "angular-playground",
     "lib:build": "ng-packagr -p ./src/app/lib/package.json && npm run schematics:build && npm run copy-css-tool",
-    "lib:publish": "cd ./src/app/lib/dist && npm pack && npm publish --registry http://localhost:4873",
+    "lib:publish": "cd ./src/app/lib/dist && npm pack && npm publish",
     "lib:patch": "cd ./src/app/lib && npm version patch",
     "schematics:build": "cd schematics && npm run build",
     "copy-css-tool": "Xcopy /E src\\app\\lib\\ui-kit\\css-tools src\\app\\lib\\dist\\css-tools\\"

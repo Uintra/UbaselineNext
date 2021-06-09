@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ResolveComponent } from './components/resolve/resolve.component';
 import { IUmbracoConfig, UMBRACO_SUPPORT_CONFIG } from './config';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
+import { UbaselineCoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [ResolveComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    UbaselineCoreModule,
   ],
   exports: [ResolveComponent]
 })

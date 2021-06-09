@@ -5,6 +5,7 @@ import { UMBRACO_SUPPORT_CONFIG, IUmbracoConfig } from '../../config';
 import { SiteSettingsService, ISiteSettings } from '../../site-settings/site-settings.service';
 import { DataMapperService } from '../../mappers/data-mapper.service';
 import { PageIdService } from '../../../helper/page-id.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { PageIdService } from '../../../helper/page-id.service';
 export class ResolveService implements Resolve<any> {
 
   urlParser = new DefaultUrlSerializer();
+  pageDataChanged$ = new Subject();
 
   constructor(
     private http: HttpClient,
@@ -45,12 +47,12 @@ export class ResolveService implements Resolve<any> {
       existedRoute.data = mappedData;
     }
 
-    this.router.navigate([dynamicRoute], { queryParams: queryParams, fragment: route.fragment}).then(() => {
-      this.setTitlePage(siteSettings, data);
-      this.pageIdService.setPageId(data && data.id.get ? data.id.get() : data && data.id);
-    });
+    this.setTitlePage(siteSettings, data);
+    this.pageIdService.setPageId(data && data.id.get ? data.id.get() : data && data.id);
 
-    return null;
+    this.pageDataChanged$.next(data);
+
+    return data;
   }
 
   private createUmbracoGetByUrl(url: string)

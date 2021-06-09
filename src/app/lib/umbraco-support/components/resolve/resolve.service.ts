@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router, DefaultUrlSerializer, Route } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, DefaultUrlSerializer, Route } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { UMBRACO_SUPPORT_CONFIG, IUmbracoConfig } from '../../config';
 import { SiteSettingsService, ISiteSettings } from '../../site-settings/site-settings.service';
@@ -17,7 +17,6 @@ export class ResolveService implements Resolve<any> {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
     @Inject(UMBRACO_SUPPORT_CONFIG) private config: IUmbracoConfig,
     private defaultDataMapper: DataMapperService,
     private siteSettingsService: SiteSettingsService,
@@ -29,30 +28,16 @@ export class ResolveService implements Resolve<any> {
     const siteSettings = await this.siteSettingsService.getSiteSettings();
     const url = this.getUrl(route);
     const data = await this.getData(url) || await this.getData(siteSettings.pageNotFoundPageUrl || '/404');
-    const dynamicUrl  = this.getUrl(route, true).substr(1);
-    const dynamicRoute = dynamicUrl.split('?').shift();
-    const { queryParams } = this.urlParser.parse(dynamicUrl);
-    const existedRoute = this.router.config.find(page => page.path === dynamicRoute);
 
     const pageConfig = this.config.pages.find((page: Route & {id: string}) => page.id === data['contentTypeAlias']);
     const mappedData = pageConfig && pageConfig.mapper ? pageConfig.mapper(data) : this.defaultDataMapper.map(data);
-    
-    if (!existedRoute) {
-      this.router.config.unshift({
-        path: dynamicRoute,
-        loadChildren: pageConfig.loadChildren,
-        data: mappedData
-      });
-    } else {
-      existedRoute.data = mappedData;
-    }
 
     this.setTitlePage(siteSettings, data);
     this.pageIdService.setPageId(data && data.id.get ? data.id.get() : data && data.id);
 
-    this.pageDataChanged$.next(data);
+    this.pageDataChanged$.next(mappedData);
 
-    return data;
+    return mappedData;
   }
 
   private createUmbracoGetByUrl(url: string)
